@@ -1,0 +1,63 @@
+/* Structural layout for clean slate styling */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: calc(100vh - 60px);
+  min-height: 500px;
+}
+
+.left {
+  width: 20%;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.right {
+  width: 80%;
+  height: 100%;
+  position: relative;
+}
+
+.up {
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.down {
+  height: 40%;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.DropSearchHead {
+  font-size: 1.1rem;
+  margin: 5px 0;
+}
+
+.preset-btn {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  text-align: left;
+}
