@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { NODES } from '../data/nodesData';
+// import { NODES } from '../data/nodesData';
 import '../DropdownSearch.css';
 
 export default function DropdownSearch({
@@ -16,6 +16,7 @@ export default function DropdownSearch({
   useEffect(() => {
     setSearchTerm(value || '');
   }, [value]);
+  const NODES = [];
 
   const filteredItems = NODES.filter(
     (item) =>

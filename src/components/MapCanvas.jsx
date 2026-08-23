@@ -1,125 +1,219 @@
-import { useRef, useEffect } from 'react';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import createMapRibbon from '../utils/pathRibbon';
-import { findShortestPath } from '../data/nodesData';
+import { useRef, useEffect } from 'react'
+import * as THREE from 'three'
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-export default function MapCanvas({ fromNode, toNode }) {
+export default function App() {
   const mountRef = useRef(null);
-  const sceneRef = useRef(null);
-  const pathMeshRef = useRef(null);
 
-  // Main Three.js setup effect
   useEffect(() => {
-    const container = mountRef.current;
-    if (!container) return;
+    //? DOM element ref
+    const currentContainer = mountRef.current
+    const width = currentContainer.clientWidth
+    const height = currentContainer.clientHeight
+    
+    //! SCENE
+    const scene = new THREE.Scene()
+    scene.background = new THREE.Color(0x1a1a1a)
 
-    const width = container.clientWidth;
-    const height = container.clientHeight;
+    //! CAMERA  
+    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000)
+    camera.position.set(0, 20, 0)
 
-    // Scene
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#020617');
-    sceneRef.current = scene;
-
-    // Camera
-    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
-    camera.position.set(0, -3.5, 3.5);
-
-    // Renderer
+    //! RENDER
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    container.appendChild(renderer.domElement);
+    renderer.setSize(width, height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    currentContainer.appendChild(renderer.domElement);
 
-    // Controls
-    const control = new OrbitControls(camera, renderer.domElement);
-    control.enableDamping = true;
-    control.dampingFactor = 0.08;
-    control.target.set(0, 0, 0);
+    //! CONTROLS
+    const controls = new OrbitControls(camera, renderer.domElement)
+    controls.enableDamping = true  
+    controls.dampingFactor = 0.05
+    controls.maxPolarAngle = Math.PI / 2
 
-    // Lighting
-    const ambientLight = new THREE.AmbientLight('#ffffff', 1.2);
-    scene.add(ambientLight);
-
-    // Map Plane Texture
+    //! LIGHTING
+    const light = new THREE.AmbientLight(0xffffff, 1.5)
+    scene.add(light)
+    
+    //! MAP PLANE WITH DYNAMIC ASPECT RATIO
+    const MAP_BASE_WIDTH = 100;
     const textureLoader = new THREE.TextureLoader();
-    const planeGeometry = new THREE.PlaneGeometry(4, 4);
-    const imageTexture1 = textureLoader.load('image.jpg');
-    const planeMaterial1 = new THREE.MeshStandardMaterial({
-      map: imageTexture1,
-      side: THREE.DoubleSide,
-    });
-    const imagePlane1 = new THREE.Mesh(planeGeometry, planeMaterial1);
-    imagePlane1.position.set(0, 0, 0);
-    scene.add(imagePlane1);
 
-    // Render Loop
-    let animationFrameId;
-    const animate = () => {
-      animationFrameId = requestAnimationFrame(animate);
-      control.update();
-      renderer.render(scene, camera);
-    };
-    animate();
+    textureLoader.load('/photo.png', (mapTexture) => {
+      const imageWidth = mapTexture.image.width;
+      const imageHeight = mapTexture.image.height;
+      const aspectRatio = imageHeight / imageWidth;
 
-    // Resize handling
-    const handleResize = () => {
-      const w = container.clientWidth;
-      const h = container.clientHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-    };
-    window.addEventListener('resize', handleResize);
+      const mapWidth = MAP_BASE_WIDTH;
+      const mapHeight = MAP_BASE_WIDTH * aspectRatio;
 
-    // Cleanup
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', handleResize);
-      if (container && renderer.domElement) {
-        container.removeChild(renderer.domElement);
+      const planeGeo = new THREE.PlaneGeometry(mapWidth, mapHeight);
+      const planeMat = new THREE.MeshBasicMaterial({ map: mapTexture });
+      const mapMesh = new THREE.Mesh(planeGeo, planeMat);
+      
+      mapMesh.rotation.x = -Math.PI / 2;
+      scene.add(mapMesh);
+      
+      //! SCALE CONVERTER
+      const mapToWorld = (u, v) => {
+        const x = (u - 0.5) * mapWidth;
+        const z = (v - 0.5) * mapHeight;
+        return new THREE.Vector3(x, 0.5, z);
+      };
+
+      //! PLOT POINTS HELPER
+      const point = (position , hexColor) => {
+        const geo = new THREE.SphereGeometry(0.8, 16, 16);
+        const mat = new THREE.MeshBasicMaterial({ color: hexColor});
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.copy(position);
+        scene.add(mesh);
+        return mesh; // FIXED: Changed renderer.mesh to mesh
+      };
+      
+      //! POINTS CREATION
+      const pointA = mapToWorld(0.22,0.935); // Center
+      const pointB = mapToWorld(0.32, 0.711); // MediSquare-1
+      const pointC = mapToWorld(0.351, 0.661); // MediSquare-2
+      const pointD = mapToWorld(0.398, 0.546); // MS-library
+      const pointE = mapToWorld(0.501, 0.607); // sarasawti-library
+      const pointF = mapToWorld(0.503, 0.64); // Bottom-right
+      const pointG = mapToWorld(0.523, 0.590); // Bottom-right
+      const pointH = mapToWorld(0.528, 0.662); // Bottom-right                            
+      const pointI = mapToWorld(0.546, 0.605); // Bottom-right
+      const pointJ = mapToWorld(0.504, 0.748); // Bottom-right
+
+      const pointK = mapToWorld(0.272, 0.413); // Bottom-right
+      const pointL = mapToWorld(0.271, 0.384); // Bottom-right
+      const pointM = mapToWorld(0.323, 0.250); // Bottom-right
+      const pointN = mapToWorld(0.475, 0.347); // Bottom-right
+      const pointO = mapToWorld(0.651, 0.466); // Bottom-right
+      const pointP = mapToWorld(0.568, 0.543); // Bottom-right
+      const pointQ = mapToWorld(0.158, 0.462); // Bottom-right
+      const pointR = mapToWorld(0.116, 0.513); // Bottom-right
+      const pointS = mapToWorld(0.097, 0.501); // Bottom-right
+      const pointT = mapToWorld(0.672, 0.477); // Bottom-right
+      const pointU = mapToWorld(0.682, 0.442); // Bottom-right
+      const pointV = mapToWorld(0.674, 0.422); // Bottom-right
+      const pointW = mapToWorld(0.697, 0.346); // Bottom-right
+      const pointX = mapToWorld(0.716, 0.335); // Bottom-right
+      const pointY = mapToWorld(0.753, 0.221); // Bottom-right
+      const pointZ = mapToWorld(0.504, 0.206); // Bottom-right
+      
+      const red = 0xff0000
+      const pur = 0x8000ff
+
+      point(pointA , red); 
+      point(pointB , pur); 
+      point(pointC , red); 
+      point(pointD , red); 
+      point(pointE , red); 
+      // point(pointF , pur); 
+      point(pointG , red); 
+      // point(pointH , red); 
+      point(pointI , red); 
+      // point(pointJ , red); 
+      // point(pointK , red); 
+      // point(pointL , red); 
+      // point(pointM , red); 
+      // point(pointN , red); 
+      // point(pointO , red); 
+      point(pointP , red); 
+      // point(pointQ , red); 
+      // point(pointR , red); 
+      // point(pointS , red); 
+      // point(pointT , red); 
+      // point(pointU , red); 
+      // point(pointV , red); 
+      // point(pointW , red); 
+      // point(pointX , red); 
+      // point(pointY , red); 
+      // point(pointZ , red); 
+
+      //! ROUTE LINE
+      const pathGeo = new THREE.BufferGeometry().setFromPoints([
+        pointA,
+        pointB,
+        pointC,
+        pointD,
+        pointE,
+        pointG,
+        pointI,
+        pointP
+      ]);
+      const pathMat = new THREE.LineBasicMaterial({
+        color: 0x00aaff,
+        linewidth: 3,
+      });
+      const pathMesh = new THREE.Line(pathGeo, pathMat);
+      scene.add(pathMesh);
+
+
+      //! FIXED: 3D Vector calculation on XZ plane with Y elevation
+      function getOuterPoint(targetPoint, nextNode, distance = 15, elevation = 10) {
+        // Calculate direction vector along the XZ plane
+        const dx = nextNode.x - targetPoint.x;
+        const dz = nextNode.z - targetPoint.z;
+
+        const length = Math.hypot(dx, dz);
+
+        if (length === 0) {
+          throw new Error("targetPoint and nextNode cannot be identical.");
+        }
+
+        // Push back along the line from nextNode -> targetPoint
+        const x = targetPoint.x - distance * (dx / length);
+        const z = targetPoint.z - distance * (dz / length);
+        const y = targetPoint.y + elevation; // Set camera height above the ground
+
+        return new THREE.Vector3(x, y, z);
       }
-      renderer.dispose();
-      planeGeometry.dispose();
-      planeMaterial1.dispose();
-      imageTexture1.dispose();
-      control.dispose();
-    };
-  }, []);
 
-  // Update Path Ribbon whenever selection changes
-  useEffect(() => {
-    const scene = sceneRef.current;
-    if (!scene) return;
+      // Usage inside textureLoader callback:
+      const targetPoint = pointC;
+      const nextNode = pointJ;
 
-    // Clear previous ribbon
-    if (pathMeshRef.current) {
-      scene.remove(pathMeshRef.current);
-      pathMeshRef.current.geometry.dispose();
-      pathMeshRef.current.material.dispose();
-      pathMeshRef.current = null;
+      // Pass custom distance away from point and camera height elevation
+      const cameraPos = getOuterPoint(targetPoint, nextNode, 15, 7); 
+
+      // Update camera and controls correctly
+      camera.position.copy(cameraPos);
+      controls.target.copy(targetPoint);
+      controls.update();
+
+    }); 
+
+    //! RESIZE HANDLER
+    const handleResize = () => {
+      const w = currentContainer.clientWidth
+      const h = currentContainer.clientHeight
+      camera.aspect = w / h
+      camera.updateProjectionMatrix()
+      renderer.setSize(w, h)
     }
 
-    if (!fromNode || !toNode) return;
+    window.addEventListener('resize', handleResize)
 
-    // Compute route
-    const pathNodes = findShortestPath(fromNode, toNode);
-    if (pathNodes.length < 2) return;
-
-    // Convert nodes to path points
-    const points = pathNodes.map((node) => new THREE.Vector3(node.x, node.y, node.z + 0.01));
-
-    // Draw path
-    const pathGeometry = createMapRibbon(points, 0.08);
-    const pathMaterial = new THREE.MeshBasicMaterial({
-      color: 0x38bdf8,
-      side: THREE.DoubleSide,
-    });
-    const pathMesh = new THREE.Mesh(pathGeometry, pathMaterial);
-    scene.add(pathMesh);
-    pathMeshRef.current = pathMesh;
-  }, [fromNode, toNode]);
+    //! ANIMATION LOOP
+    let animationFrameID;
+    const animate = () => {
+      animationFrameID = requestAnimationFrame(animate)
+      controls.update()
+      renderer.render(scene, camera)      
+    }
+    animate();
+    
+    return () => {
+      //! CLEANUP (strictmode)
+      window.removeEventListener('resize', handleResize)
+      cancelAnimationFrame(animationFrameID)
+      controls.dispose()
+      renderer.dispose()
+      if (currentContainer.contains(renderer.domElement)){
+        currentContainer.removeChild(renderer.domElement)
+      }
+    }
+  }, [])
 
   return (
     <div
@@ -132,5 +226,5 @@ export default function MapCanvas({ fromNode, toNode }) {
         left: 0,
       }}
     />
-  );
+  )
 }
