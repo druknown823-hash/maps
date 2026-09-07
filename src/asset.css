@@ -1,0 +1,72 @@
+/* Structural layout for clean slate styling */
+body, html, #root, #body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  font-family: sans-serif;
+  box-sizing: border-box;
+  overflow: hidden; /* Prevent scrolling since we want a full-screen canvas */
+}
+
+.main {
+  width: 100vw;
+  height: 100vh;
+  position: relative; /* Container for absolute children */
+}
+
+.left {
+  position: absolute;
+  top: 80px; /* Offset for navbar */
+  left: 20px;
+  width: 350px;
+  max-width: 90vw;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  pointer-events: auto; /* Allow interactions */
+}
+
+.right {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+}
+
+.up {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #eee;
+}
+
+.down {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  box-sizing: border-box;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.DropSearchHead {
+  font-size: 1.1rem;
+  margin: 5px 0;
+}
+
+.preset-btn {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  text-align: left;
+}

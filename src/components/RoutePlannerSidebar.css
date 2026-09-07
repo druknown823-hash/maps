@@ -1,0 +1,160 @@
+.search-route-card {
+  height: 40%;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.route-inputs-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.route-icons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  margin-right: 8px;
+}
+
+.icon-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+}
+
+.top-icon-row {
+  gap: 4px;
+}
+
+.drag-icon {
+  font-size: 14px;
+  color: #a0a0a0;
+  cursor: grab;
+  margin-left: -12px;
+}
+
+.circle-icon {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #5f6368;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.dots-row {
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+}
+
+.vertical-dots {
+  font-size: 18px;
+  color: #a0a0a0;
+  line-height: 1;
+}
+
+.bottom-icon-row {
+  margin-left: 10px;
+}
+
+.pin-icon {
+  width: 16px;
+  height: 20px;
+  background-color: #fff;
+  border: 2px solid #ea4335;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.pin-inner-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #ea4335;
+  border-radius: 50%;
+}
+
+.route-inputs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.input-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-box input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 14px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.start-box input {
+  border: 1.5px solid #008080; /* Teal theme color from image */
+  padding-right: 36px; /* Space for search icon */
+}
+
+.start-box input:focus {
+  border-color: #006666;
+}
+
+.start-box .search-icon {
+  position: absolute;
+  right: 12px;
+  color: #008080;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.dest-box input {
+  border: 1.5px solid #dcdcdc; /* Gray border */
+}
+
+.dest-box input:focus {
+  border-color: #b0b0b0;
+}
+
+.route-swap {
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+}
+
+.swap-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #5f6368;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.swap-btn:hover {
+  background-color: #f1f3f4;
+}
