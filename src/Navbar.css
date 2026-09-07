@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .navbar {
   display: flex;
   align-items: center;
@@ -117,4 +118,38 @@
   .navbar-toggle {
     display: flex;
   }
+=======
+/* Navbar clean slate styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+.navbar-logo {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.navbar-btn {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.navbar-toggle {
+  display: none;
+>>>>>>> ef2fa6991b94f3d561441eb2fc7b00b7085406b1
 }

@@ -3,6 +3,7 @@ import '../Navbar.css';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+<<<<<<< HEAD
   const [activeId, setActiveId] = useState('map');
 
   const navItems = [
@@ -30,6 +31,21 @@ export default function Navbar() {
       </div>
 
       {/* Mobile hamburger */}
+=======
+
+  return (
+    <nav className="navbar">
+      <div className="navbar-logo">🗺️ 3D Map Navigator</div>
+
+      <div className={`navbar-links ${isOpen ? 'active' : ''}`}>
+        <a href="#home">Home</a>
+        <a href="#map">3D Map</a>
+        <a href="#nodes">Locations</a>
+        <a href="#about">About</a>
+        <button className="navbar-btn">Live Nav</button>
+      </div>
+
+>>>>>>> ef2fa6991b94f3d561441eb2fc7b00b7085406b1
       <button
         className="navbar-toggle"
         onClick={() => setIsOpen(!isOpen)}
