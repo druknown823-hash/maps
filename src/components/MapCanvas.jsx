@@ -39,6 +39,67 @@ export default function App() {
     const MAP_BASE_WIDTH = 100;
     const textureLoader = new THREE.TextureLoader();
 
+    const create2DRibbon = (points, ribbonWidth, yOffset = 0.05, color = 0x00aaff) => {
+      if (!points || points.length < 2) return new THREE.Group();
+
+      const vertices = [];
+      const indices = [];
+      const uvs = [];
+
+      for (let i = 0; i < points.length; i++) {
+        const current = points[i];
+        const dir = new THREE.Vector2();
+
+        // Compute 2D direction vector (XZ plane)
+        if (i < points.length - 1) {
+          dir.set(points[i + 1].x - current.x, points[i + 1].z - current.z);
+        } else {
+          dir.set(current.x - points[i - 1].x, current.z - points[i - 1].z);
+        }
+        dir.normalize();
+
+        // Calculate perpendicular vector (-z, x)
+        const normal = new THREE.Vector2(-dir.y, dir.x);
+        const halfWidth = ribbonWidth / 2;
+
+        // Compute left and right vertex positions
+        const leftX = current.x + normal.x * halfWidth;
+        const leftZ = current.z + normal.y * halfWidth;
+        const rightX = current.x - normal.x * halfWidth;
+        const rightZ = current.z - normal.y * halfWidth;
+
+        // Push positions elevated slightly above map
+        vertices.push(leftX, yOffset, leftZ);
+        vertices.push(rightX, yOffset, rightZ);
+
+        // UV mapping
+        const progress = i / (points.length - 1);
+        uvs.push(0, progress);
+        uvs.push(1, progress);
+
+        // Build quad faces
+        if (i < points.length - 1) {
+          const baseIndex = i * 2;
+          indices.push(baseIndex, baseIndex + 1, baseIndex + 2);
+          indices.push(baseIndex + 1, baseIndex + 3, baseIndex + 2);
+        }
+      }
+
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+      geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+      geometry.setIndex(indices);
+
+      const material = new THREE.MeshBasicMaterial({
+        color: color,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.9
+      });
+
+      return new THREE.Mesh(geometry, material);
+    };
+
     textureLoader.load('/photo.png', (mapTexture) => {
       const imageWidth = mapTexture.image.width;
       const imageHeight = mapTexture.image.height;
@@ -130,22 +191,45 @@ export default function App() {
       // point(pointY , red); 
       // point(pointZ , red); 
 
+
+      
       //! ROUTE LINE
-      const pathGeo = new THREE.BufferGeometry().setFromPoints([
-        pointA,
-        pointB,
-        pointC,
-        pointD,
-        pointE,
-        pointG,
-        pointI,
-        pointP
-      ]);
-      const pathMat = new THREE.LineBasicMaterial({
-        color: 0x00aaff,
-        linewidth: 3,
-      });
-      const pathMesh = new THREE.Line(pathGeo, pathMat);
+      //! ROUTE LINE (2D Ribbon)
+        const routePoints = [pointA, pointB, pointC, pointD, pointE, pointG, pointI, pointP];
+        const ribbonWidth = 1.2;
+        const vertices = [];
+        const indices = [];
+
+        // Calculate 2D offset vertices along the path
+        for (let i = 0; i < routePoints.length; i++) {
+          const p = routePoints[i];
+          const next = routePoints[i + 1] || p;
+          const prev = routePoints[i - 1] || p;
+          
+          const dir = new THREE.Vector2(next.x - prev.x, next.z - prev.z).normalize();
+          const normal = new THREE.Vector2(-dir.y, dir.x).multiplyScalar(ribbonWidth / 2);
+
+          // Left & Right vertices (Y = 0.1 elevates ribbon above image plane)
+          vertices.push(p.x + normal.x, 0.1, p.z + normal.y);
+          vertices.push(p.x - normal.x, 0.1, p.z - normal.y);
+
+          if (i < routePoints.length - 1) {
+            const idx = i * 2;
+            indices.push(idx, idx + 1, idx + 2, idx + 1, idx + 3, idx + 2);
+          }
+        }
+
+        // 1. Updated Geometry
+        const pathGeo = new THREE.BufferGeometry();
+        pathGeo.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        pathGeo.setIndex(indices);
+
+        // 2. Updated Material
+        const pathMat = new THREE.MeshBasicMaterial({
+          color: 0x00aaff,
+          side: THREE.DoubleSide
+        })
+      const pathMesh = new THREE.Mesh(pathGeo, pathMat);
       scene.add(pathMesh);
 
 
@@ -174,7 +258,7 @@ export default function App() {
       const nextNode = pointJ;
 
       // Pass custom distance away from point and camera height elevation
-      const cameraPos = getOuterPoint(targetPoint, nextNode, 15, 7); 
+      const cameraPos = getOuterPoint(pointC, pointD, 15, 7); 
 
       // Update camera and controls correctly
       camera.position.copy(cameraPos);
