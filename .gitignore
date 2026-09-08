@@ -22,7 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-<<<<<<< HEAD
 # Environment files
 .env
 .env.local
@@ -32,5 +31,3 @@ dist-ssr
 
 # Keep the example/template file tracked
 !.env.example
-=======
->>>>>>> ef2fa6991b94f3d561441eb2fc7b00b7085406b1

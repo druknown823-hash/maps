@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Navbar from './components/Navbar';
 import RoutePlannerSidebar from './components/RoutePlannerSidebar';
 import MapContainer from './components/MapContainer';
-<<<<<<< HEAD
 import { NODES } from './data/nodesData';
 import './asset.css';
 
@@ -34,20 +33,12 @@ export default function App() {
       setCurrentStepIndex(prev => prev - 1);
     }
   };
-=======
-import './asset.css';
-
-export default function App() {
-  const [fromNode, setFromNode] = useState('Entrance');
-  const [toNode, setToNode] = useState('Exit');
->>>>>>> ef2fa6991b94f3d561441eb2fc7b00b7085406b1
 
   return (
     <div id="body">
       <Navbar />
       <div className="main">
         <RoutePlannerSidebar
-<<<<<<< HEAD
           routePlanner={MOCK_ROUTE}
           currentStepIndex={currentStepIndex}
           onNext={handleNextStep}
@@ -58,16 +49,6 @@ export default function App() {
             routePlanner={MOCK_ROUTE} 
             currentStepIndex={currentStepIndex} 
           />
-=======
-          fromNode={fromNode}
-          toNode={toNode}
-          setFromNode={setFromNode}
-          setToNode={setToNode}
-        />
-
-        <div className="right">
-          <MapContainer fromNode={fromNode} toNode={toNode} />
->>>>>>> ef2fa6991b94f3d561441eb2fc7b00b7085406b1
         </div>
       </div>
     </div>

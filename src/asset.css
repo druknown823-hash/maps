@@ -1,5 +1,4 @@
 /* Structural layout for clean slate styling */
-<<<<<<< HEAD
 body, html, #root, #body {
   margin: 0;
   padding: 0;
@@ -56,57 +55,6 @@ body, html, #root, #body {
   box-sizing: border-box;
   max-height: 40vh;
   overflow-y: auto;
-=======
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  box-sizing: border-box;
-}
-
-.main {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: calc(100vh - 60px);
-  min-height: 500px;
-}
-
-.left {
-  width: 20%;
-  min-width: 250px;
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  background-color: aliceblue;
-}
-
-.right {
-  width: 80%;
-  height: 100%;
-  position: relative;
-}
-
-.up {
-  height: 40%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  border: 1px solid black;
-  border-radius: 12px;
-  padding: 15px;
-  box-sizing: border-box;
-  box-shadow:  5px;
-}
-
-.down {
-  height: 60%;
-  margin-top: 10px;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  padding: 15px;
-  box-sizing: border-box;
->>>>>>> ef2fa6991b94f3d561441eb2fc7b00b7085406b1
 }
 
 .DropSearchHead {

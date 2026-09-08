@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* Google Maps Styled Dropdown & Autocomplete Search */
 
 .gm-search-container {
@@ -325,75 +324,4 @@
 .gm-no-results-hint {
   font-size: 0.78rem;
   color: #80868b;
-=======
-/* DropdownSearch component clean slate styles */
-.dropdown-container {
-  position: relative;
-  width: 100%;
-  margin: 8px 0;
-}
-
-.dropdown-label {
-  display: block;
-  margin-bottom: 4px;
-}
-
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.dropdown-input {
-  width: 100%;
-  padding: 8px 30px 8px 8px;
-  box-sizing: border-box;
-}
-
-.clear-btn {
-  position: absolute;
-  right: 8px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  margin: 4px 0 0 0;
-  padding: 0;
-  list-style: none;
-  max-height: 180px;
-  overflow-y: auto;
-  z-index: 100;
-  border: 1px solid #ccc;
-  background-color: white;
-}
-
-.dropdown-item {
-  padding: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.dropdown-item:hover {
-  background-color: #f0f0f0;
-}
-
-.dropdown-item.selected {
-  background-color: #007bff;
-  color: white;
-}
-
-.dropdown-no-results {
-  padding: 8px;
-  text-align: center;
-  color: #999;
->>>>>>> ef2fa6991b94f3d561441eb2fc7b00b7085406b1
 }

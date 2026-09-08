@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import './RoutePlannerSidebar.css';
 
 export default function RoutePlannerSidebar({ routePlanner, currentStepIndex, onNext, onPrev }) {
@@ -140,38 +139,6 @@ export default function RoutePlannerSidebar({ routePlanner, currentStepIndex, on
             {currentStepIndex >= routePlanner.length - 1 ? "Arrived" : "Next"}
           </button>
         </div>
-=======
-import DropdownSearch from './DropdownSearch';
-
-export default function RoutePlannerSidebar({
-  fromNode,
-  toNode,
-  setFromNode,
-  setToNode,
-}) {
-  return (
-    <div className="left">
-      <div className="up">
-        <h2 className="DropSearchHead">Route Planner</h2>
-
-        <DropdownSearch
-          label="Starting Node (From):"
-          value={fromNode}
-          onChange={setFromNode}
-          placeholder="Type start location..."
-        />
-
-        <DropdownSearch
-          label="Destination Node (To):"
-          value={toNode}
-          onChange={setToNode}
-          placeholder="Type end location..."
-        />
-      </div>
-
-      <div className="down">
-        {/* Add your own details or settings here */}
->>>>>>> ef2fa6991b94f3d561441eb2fc7b00b7085406b1
       </div>
     </div>
   );
